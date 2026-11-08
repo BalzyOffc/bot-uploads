@@ -1,0 +1,82 @@
+name: 🧹 Auto Cleanup Old Files
+
+on:
+  schedule:
+    # Setiap hari Minggu jam 3 pagi UTC (10 pagi WIB)
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Hapus file lebih lama dari (hari)'
+        required: false
+        default: '30'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧹 Delete files older than N days
+        id: cleanup
+        run: |
+          set -e
+          
+          DAYS="${{ github.event.inputs.days || 30 }}"
+          echo "🗑️ Menghapus file lebih lama dari $DAYS hari"
+          
+          if [ ! -d "uploads" ]; then
+            echo "❌ Folder uploads tidak ada"
+            exit 0
+          fi
+          
+          CUTOFF=$(date -d "$DAYS days ago" +%s)
+          DELETED=0
+          TOTAL_BEFORE=$(find uploads -type f -not -name '.gitkeep' | wc -l)
+          
+          find uploads -type f -not -name '.gitkeep' -print0 | while IFS= read -r -d '' file; do
+            FILE_TIME=$(stat -c %Y "$file" 2>/dev/null || echo 0)
+            if [ "$FILE_TIME" -lt "$CUTOFF" ]; then
+              echo "🗑️ Delete: $file"
+              rm -f "$file"
+              DELETED=$((DELETED + 1))
+            fi
+          done
+          
+          TOTAL_AFTER=$(find uploads -type f -not -name '.gitkeep' | wc -l)
+          REAL_DELETED=$((TOTAL_BEFORE - TOTAL_AFTER))
+          
+          echo "deleted=$REAL_DELETED" >> $GITHUB_OUTPUT
+          echo "📊 Total: $TOTAL_BEFORE → $TOTAL_AFTER (deleted: $REAL_DELETED)"
+
+      - name: 💾 Commit & Push
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          
+          git add -A
+          
+          if git diff --staged --quiet; then
+            echo "✅ Tidak ada file yang perlu dihapus"
+            exit 0
+          fi
+          
+          DELETED="${{ steps.cleanup.outputs.deleted }}"
+          git commit -m "🧹 Auto cleanup: hapus $DELETED file lama ($(date -u +'%Y-%m-%d'))"
+          git push
+          
+          echo "✅ Cleanup selesai: $DELETED file dihapus"
+
+      - name: 📊 Summary
+        run: |
+          echo "## 🧹 Cleanup Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deleted**: ${{ steps.cleanup.outputs.deleted }} files" >> $GITHUB_STEP_SUMMARY
+          echo "- **Date**: $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
