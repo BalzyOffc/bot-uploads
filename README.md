@@ -4,9 +4,9 @@
 
 **Storage repository untuk file upload dari Telegram Bot**
 
-[![Size](https://img.shields.io/github/repo-size/USERNAME/bot-uploads?style=flat&color=blue)](https://github.com/USERNAME/bot-uploads)
-[![Last Commit](https://img.shields.io/github/last-commit/USERNAME/bot-uploads?style=flat&color=green)](https://github.com/USERNAME/bot-uploads)
-[![Files](https://img.shields.io/github/directory-file-count/USERNAME/bot-uploads/uploads?style=flat&color=orange&label=files)](https://github.com/USERNAME/bot-uploads/tree/main/uploads)
+[![Size](https://img.shields.io/github/repo-size/BalzyOffc/bot-uploads?style=flat&color=blue)](https://github.com/BalzyOffc/bot-uploads)
+[![Last Commit](https://img.shields.io/github/last-commit/BalzyOffc/bot-uploads?style=flat&color=green)](https://github.com/BalzyOffc/bot-uploads)
+[![Files](https://img.shields.io/github/directory-file-count/BalzyOffc/bot-uploads/uploads?style=flat&color=orange&label=files)](https://github.com/BalzyOffc/bot-uploads/tree/main/uploads)
 
 </div>
 
