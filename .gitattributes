@@ -1,0 +1,53 @@
+# ═══════════════════════════════════════════════════════════════
+# Default
+# ═══════════════════════════════════════════════════════════════
+* text=auto
+
+# ═══════════════════════════════════════════════════════════════
+# Binary Files — Jangan ubah line ending
+# ═══════════════════════════════════════════════════════════════
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.bmp binary
+*.ico binary
+*.svg binary
+
+*.mp4 binary
+*.webm binary
+*.mov binary
+*.avi binary
+*.mkv binary
+
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.flac binary
+*.m4a binary
+
+*.pdf binary
+*.doc binary
+*.docx binary
+*.xls binary
+*.xlsx binary
+*.ppt binary
+*.pptx binary
+
+*.zip binary
+*.rar binary
+*.7z binary
+*.tar binary
+*.gz binary
+
+*.apk binary
+*.exe binary
+*.dll binary
+*.so binary
+
+# ═══════════════════════════════════════════════════════════════
+# Uploads folder — Skip diff
+# ═══════════════════════════════════════════════════════════════
+uploads/* linguist-vendored
+uploads/* linguist-generated=true
